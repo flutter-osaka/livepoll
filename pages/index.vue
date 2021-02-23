@@ -1,26 +1,44 @@
 <template>
   <div class="container">
-    <div>
-      <Logo />
-      <h1 class="title">nuxt</h1>
-      <div class="links">
-        <a
-          href="https://nuxtjs.org/"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="button--green"
-        >
-          Documentation
-        </a>
-        <a
-          href="https://github.com/nuxt/nuxt.js"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="button--grey"
-        >
-          GitHub
-        </a>
-      </div>
+    <div class="w-full">
+      <j-input
+        :text="title"
+        placeholder="タイトル"
+        class="mt-4 w-full"
+        @handleInput="(val) => (title = val)"
+      />
+      <j-input
+        v-for="(answer, index) in answers"
+        :key="index"
+        :text="answer.text"
+        :placeholder="answer.placeholder"
+        class="mt-4 w-full"
+        @handleInput="(val) => (answer.text = val)"
+      />
+      <j-button
+        text="答えを追加する"
+        :disabled="answers.length >= 4"
+        class="mt-4"
+        @handleClick="answers.push({ text: '', placeholder: '答え' })"
+      />
+      <j-button
+        text="質問を追加する"
+        :disabled="answers.length < 2"
+        class="mt-4"
+        @handleClick="handleAddQuestion"
+      />
+    </div>
+
+    <div class="w-full mw-4 flex flex-col justify-center">
+      <a
+        v-for="question in questions.item"
+        :key="question.id"
+        :href="`/poll/${question.data.id}`"
+        :style="{ borderRadius: '4px' }"
+        class="p-8 mt-4 mw-4 border border-solid border-primary"
+      >
+        {{ question.data.title }}
+      </a>
     </div>
   </div>
 </template>
@@ -28,40 +46,34 @@
 <script lang="ts">
 import Vue from 'vue'
 
+import {
+  fetchQuestions,
+  fetchVotes,
+  addQuestion,
+  answers
+} from '~/services/questionService'
+
 export default Vue.extend({
-  //
+  async asyncData() {
+    const questions = await fetchQuestions()
+    const votes = await fetchVotes()
+    return { questions, votes }
+  },
+  data() {
+    return {
+      title: '' as string,
+      answers: answers
+    }
+  },
+  methods: {
+    async handleAddQuestion(): Promise<void> {
+      await addQuestion({
+        title: this.title,
+        answers: this.answers
+      })
+      this.title = ''
+      this.answers = answers
+    }
+  }
 })
 </script>
-
-<style>
-.container {
-  margin: 0 auto;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-}
-
-.title {
-  font-family: 'Quicksand', 'Source Sans Pro', -apple-system, BlinkMacSystemFont,
-    'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  display: block;
-  font-weight: 300;
-  font-size: 100px;
-  color: #35495e;
-  letter-spacing: 1px;
-}
-
-.subtitle {
-  font-weight: 300;
-  font-size: 42px;
-  color: #526488;
-  word-spacing: 5px;
-  padding-bottom: 15px;
-}
-
-.links {
-  padding-top: 15px;
-}
-</style>
