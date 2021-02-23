@@ -1,0 +1,36 @@
+{
+  "name": "nuxt",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "nuxt-ts",
+    "build": "nuxt-ts build",
+    "start": "nuxt-ts start",
+    "generate": "nuxt-ts generate",
+    "lint": "eslint --ext vue,ts --ignore-path .gitignore .",
+    "lint:fix": "eslint --ext vue,ts --ignore-path .gitignore . --fix",
+    "test": "jest",
+    "test-cover": "jest --coverage",
+    "test:w": "npm run test-cover -- --watch"
+  },
+  "dependencies": {
+    "@nuxtjs/pwa": "^3.0.2",
+    "nuxt": "^2.14.6"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.12.3",
+    "@nekohack/eslint-config-vue": "^1.0.0-beta.1",
+    "@nuxt/types": "^2.14.6",
+    "@nuxt/typescript-build": "^2.0.3",
+    "@nuxt/typescript-runtime": "^2.0.0",
+    "@typescript-eslint/eslint-plugin": "^4.5.0",
+    "@typescript-eslint/parser": "^4.5.0",
+    "@vue/test-utils": "^1.1.0",
+    "babel-core": "7.0.0-bridge.0",
+    "core-js": "^3.6.5",
+    "eslint": "^7.10.0",
+    "jest": "^26.5.0",
+    "ts-jest": "^26.4.1",
+    "vue-jest": "^3.0.4"
+  }
+}
